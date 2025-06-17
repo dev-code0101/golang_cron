@@ -1,0 +1,20 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang_cron
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: golang_cron
+  template:
+    metadata:
+      labels:
+        app: golang_cron
+    spec:
+      containers:
+        - name: golang_cron
+          image: golang_cron:latest
+          ports:
+            - containerPort: 8080
