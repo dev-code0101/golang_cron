@@ -1,19 +1,22 @@
 # hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# Horizontal Pod Autoscaler configuration
+# Ensure that the Kubernetes Metrics Server is installed in your cluster, as HPA relies on it to fetch metrics.
+# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+apiVersion: autoscaling/v2 # Specify the API version for HPA (v2 supports multiple metrics)
+kind: HorizontalPodAutoscaler # Resource type is HPA
 metadata:
-  name: example-hpa
+  name: example-hpa # Name of the HPA resource
 spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: golang_cron
-  minReplicas: 3
-  maxReplicas: 10
-  metrics:
-    - type: Resource
+  scaleTargetRef: # Reference to the target resource to scale
+    apiVersion: apps/v1 # API version of the target resource
+    kind: Deployment # Type of the target resource (Deployment)
+    name: golang_cron # Name of the Deployment to scale (must match your deployment name)
+  minReplicas: 3 # Minimum number of pod replicas
+  maxReplicas: 10 # Maximum number of pod replicas
+  metrics: # Metrics used to determine scaling
+    - type: Resource # Using resource-based metrics (CPU/memory)
       resource:
-        name: cpu
+        name: cpu # Resource name (CPU in this case)
         target:
-          type: Utilization
-          averageUtilization: 50
+          type: Utilization # Target type is utilization percentage
+          averageUtilization: 50 # Target average CPU utilization (50%)
